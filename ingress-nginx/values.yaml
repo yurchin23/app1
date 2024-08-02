@@ -1,0 +1,24 @@
+ingress:
+  name: my-ingress
+  certIssuer: letsencrypt-prod
+  limitConnections: 1000
+  limitRpm: 1000
+  tlsHosts:
+    - localhost.local
+    - localhost.jenkins
+  secretName: hello-kubernetes-tls
+  rules:
+    - host: localhost.local
+      paths:
+        - path: /
+          pathType: Prefix
+          service:
+            name: myapp-service
+            port: 80
+    - host: localhost.jenkins
+      paths:
+        - path: /
+          pathType: Prefix
+          service:
+            name: jenkins-svc
+            port: 80
