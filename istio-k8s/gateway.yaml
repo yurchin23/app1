@@ -12,3 +12,4 @@ spec:
       protocol: HTTP
     hosts:
     - localhost.local
+    - localhost1.local

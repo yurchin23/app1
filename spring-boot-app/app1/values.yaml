@@ -1,7 +1,7 @@
 image:
-  repository: localhost:5000/myapp
+  repository: localhost:5000/myapp1
   tag: latest
 
 app:
-  name: myapp
-  service: myapp-service
+  name: myapp1
+  service: myapp1-service

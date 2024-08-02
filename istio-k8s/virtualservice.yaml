@@ -5,14 +5,25 @@ metadata:
 spec:
   hosts:
   - localhost.local
+  - localhost1.local
   gateways:
   - my-gateway
   http:
   - match:
-    - uri:
-        prefix: "/"
+    - headers:
+        host:
+          exact: "localhost.local"
     route:
     - destination:
         host: myapp-service
+        port:
+          number: 80
+  - match:
+    - headers:
+        host:
+          exact: "localhost1.local"
+    route:
+    - destination:
+        host: myapp1-service
         port:
           number: 80
