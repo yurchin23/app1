@@ -1,19 +1,19 @@
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
 metadata:
-  name: myapp-destination-rule
+  name: myapp-destinationrule
 spec:
   host: myapp-service
   trafficPolicy:
     loadBalancer:
       simple: ROUND_ROBIN
-    connectionPool:
-      http:
-        http1MaxPendingRequests: 100
-        maxRequestsPerConnection: 100
-        maxRetries: 3
-    outlierDetection:
-      consecutive5xxErrors: 5
-      interval: 1m
-      baseEjectionTime: 30s
-      maxEjectionPercent: 50
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: myapp1-destinationrule
+spec:
+  host: myapp1-service
+  trafficPolicy:
+    loadBalancer:
+      simple: ROUND_ROBIN
