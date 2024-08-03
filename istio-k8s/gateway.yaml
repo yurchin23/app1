@@ -11,5 +11,5 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - localhost.local
-    - localhost1.local
+    - localhost.app.xyz
+    - localhost.app1.xyz

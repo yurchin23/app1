@@ -4,15 +4,15 @@ metadata:
   name: myapp
 spec:
   hosts:
-  - localhost.local
-  - localhost1.local
+  - localhost.app.xyz
+  - localhost.app1.xyz
   gateways:
   - my-gateway
   http:
   - match:
     - headers:
         host:
-          exact: "localhost.local"
+          exact: "localhost.app.xyz"
     route:
     - destination:
         host: myapp-service
@@ -21,7 +21,7 @@ spec:
   - match:
     - headers:
         host:
-          exact: "localhost1.local"
+          exact: "localhost.app1.xyz"
     route:
     - destination:
         host: myapp1-service

@@ -25,7 +25,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 dir("${APP_PATH}") {
-                    sh 'docker build . -t ${APP_NAME}'
+                    sh 'docker build -t ${APP_NAME}:latest .'
                 }
             }
         }

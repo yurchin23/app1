@@ -15,7 +15,7 @@ public class MyController {
 
     @GetMapping("/send")
     public RedirectView send(@RequestParam(value = "name") String name) {
-        String url = "http://localhost.local1/api/greet?name=" + name;
+        String url = "http://localhost.app1.com/api/greet?name=" + name;
         return new RedirectView(url);
     }
 }
