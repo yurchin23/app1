@@ -1,0 +1,6 @@
+# CI/CD Pipeline for Spring Boot Applications
+
+This project demonstrates a CI/CD pipeline for deploying Spring Boot applications using Jenkins, Docker, and Helm. The pipeline is triggered by GitHub webhooks and includes steps for building the application, creating Docker images, pushing them to a local Docker registry, and deploying to a Kubernetes cluster.
+
+## Project Structure
+
