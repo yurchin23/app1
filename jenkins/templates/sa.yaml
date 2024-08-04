@@ -13,10 +13,10 @@ metadata:
 rules:
 - apiGroups: [""]
   resources: ["pods", "pods/exec", "services", "endpoints", "secrets"]
-  verbs: ["get", "list", "watch", "create", "update", "delete"]
+  verbs: ["get", "list", "watch", "create", "update", "delete", "patch"]
 - apiGroups: ["apps"]
   resources: ["deployments", "statefulsets", "replicasets"]
-  verbs: ["get", "list", "watch", "create", "update", "delete"]
+  verbs: ["get", "list", "watch", "create", "update", "delete", "patch"]
 - apiGroups: ["helm.cattle.io"]
   resources: ["helmcharts"]
   verbs: ["get", "list", "watch"]

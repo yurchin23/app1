@@ -50,7 +50,7 @@ pipeline {
             steps {
                 script {
                     dir("${APP1_PATH}") {
-                        sh "helm upgrade --install ${APP1_HELM_NAME} . --set image.repository=${DOCKER_REGISTRY}/${APP1_NAME} --set image.tag=latest"
+                        sh "helm upgrade ${APP1_HELM_NAME} . --set image.repository=${DOCKER_REGISTRY}/${APP1_NAME} --set image.tag=latest"
                     }
                 }
             }
@@ -103,7 +103,7 @@ pipeline {
             steps {
                 script {
                     dir("${APP2_PATH}") {
-                        sh "helm upgrade --install ${APP2_HELM_NAME} . --set image.repository=${DOCKER_REGISTRY}/${APP2_NAME} --set image.tag=latest"
+                        sh "helm upgrade ${APP2_HELM_NAME} . --set image.repository=${DOCKER_REGISTRY}/${APP2_NAME} --set image.tag=latest"
                     }
                 }
             }
