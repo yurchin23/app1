@@ -13,19 +13,18 @@ metadata:
 rules:
 - apiGroups: [""]
   resources: ["pods", "pods/exec", "services", "endpoints", "secrets"]
-  verbs: ["get", "list", "watch"]
+  verbs: ["get", "list", "watch", "create", "update", "delete"]
 - apiGroups: ["apps"]
   resources: ["deployments", "statefulsets", "replicasets"]
-  verbs: ["get", "list", "watch"]
+  verbs: ["get", "list", "watch", "create", "update", "delete"]
 - apiGroups: ["helm.cattle.io"]
   resources: ["helmcharts"]
   verbs: ["get", "list", "watch"]
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: jenkins-role-binding
+  name: jenkins-rolebinding
   namespace: default
 subjects:
 - kind: ServiceAccount
@@ -35,5 +34,3 @@ roleRef:
   kind: Role
   name: jenkins-role
   apiGroup: rbac.authorization.k8s.io
-
-
