@@ -5,6 +5,7 @@ pipeline {
         DOCKER_REGISTRY = "localhost:5000"
         APP_NAME = "myapp"
         APP_PATH = "spring-boot-app/app0"
+        APP_HELM_NAME = "app0"
     }
 
     stages {
@@ -57,7 +58,7 @@ pipeline {
                     
                     // Обновление или установка релиза с помощью Helm
                     dir("${APP_PATH}") {
-                        sh "helm upgrade --install ${APP_NAME} . --set image.repository=${DOCKER_REGISTRY}/${APP_NAME} --set image.tag=latest"
+                        sh "helm upgrade --install ${APP_HELM_NAME} . --set image.repository=${DOCKER_REGISTRY}/${APP_NAME} --set image.tag=latest"
                     }
                 }
             }
