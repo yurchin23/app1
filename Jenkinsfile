@@ -44,8 +44,21 @@ pipeline {
 
         stage('Deploy with Helm') {
             steps {
-                dir("${APP_PATH}") {
-                    sh 'helm upgrade --install ${APP_NAME} . --set image.repository=${DOCKER_REGISTRY}/${APP_NAME} --set image.tag=latest'
+                script {
+                    // Установка helm, если требуется
+                    // sh 'curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash'
+                    
+                    // // Настройка kubeconfig
+                    // sh "mkdir -p /home/jenkins/.kube"
+                    // sh "cp /path/to/your/kubeconfig ${KUBE_CONFIG_PATH}" // Укажите путь к вашему kubeconfig
+                    
+                    // // Проверка доступа к Kubernetes
+                    // sh "kubectl --kubeconfig=${KUBE_CONFIG_PATH} cluster-info"
+                    
+                    // Обновление или установка релиза с помощью Helm
+                    dir("${APP_PATH}") {
+                        sh "helm upgrade --install ${APP_NAME} . --set image.repository=${DOCKER_REGISTRY}/${APP_NAME} --set image.tag=latest"
+                    }
                 }
             }
         }

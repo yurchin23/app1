@@ -5,6 +5,8 @@ ingress:
   limitRpm: 1000 # Limits
   tlsHosts:
     - localhost.jenkins.xyz
+    - localhost.app.xyz
+    - localhost.app1.xyz
   secretName: ssl-certificates-tls
   rules:
     - host: localhost.app.xyz
