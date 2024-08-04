@@ -3,9 +3,12 @@ pipeline {
 
     environment {
         DOCKER_REGISTRY = "localhost:5000"
-        APP_NAME = "myapp"
-        APP_PATH = "spring-boot-app/app0"
-        APP_HELM_NAME = "app0"
+        APP1_NAME = "app0"
+        APP1_PATH = "spring-boot-app/app0"
+        APP1_HELM_NAME = "app0"
+        APP2_NAME = "app1"
+        APP2_PATH = "spring-boot-app/app1"
+        APP2_HELM_NAME = "app1"
     }
 
     stages {
@@ -15,50 +18,92 @@ pipeline {
             }
         }
 
-        stage('Build Maven Project') {
+        stage('Build Maven Project for App0') {
             steps {
-                dir("${APP_PATH}") {
+                dir("${APP1_PATH}") {
                     sh 'mvn clean install'
                 }
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build Docker Image for App0') {
             steps {
-                dir("${APP_PATH}") {
-                    sh 'docker build -t ${APP_NAME}:latest .'
+                dir("${APP1_PATH}") {
+                    sh 'docker build -t ${APP1_NAME}:latest .'
                 }
             }
         }
 
-        stage('Tag Docker Image') {
+        stage('Tag Docker Image for App0') {
             steps {
-                sh 'docker tag ${APP_NAME}:latest ${DOCKER_REGISTRY}/${APP_NAME}:latest'
+                sh 'docker tag ${APP1_NAME}:latest ${DOCKER_REGISTRY}/${APP1_NAME}:latest'
             }
         }
 
-        stage('Push Docker Image to Registry') {
+        stage('Push Docker Image for App0 to Registry') {
             steps {
-                sh 'docker push ${DOCKER_REGISTRY}/${APP_NAME}:latest'
+                sh 'docker push ${DOCKER_REGISTRY}/${APP1_NAME}:latest'
             }
         }
 
-        stage('Deploy with Helm') {
+        stage('Deploy App0 with Helm') {
             steps {
                 script {
-                    // Установка helm, если требуется
-                    // sh 'curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash'
-                    
-                    // // Настройка kubeconfig
-                    // sh "mkdir -p /home/jenkins/.kube"
-                    // sh "cp /path/to/your/kubeconfig ${KUBE_CONFIG_PATH}" // Укажите путь к вашему kubeconfig
-                    
-                    // // Проверка доступа к Kubernetes
-                    // sh "kubectl --kubeconfig=${KUBE_CONFIG_PATH} cluster-info"
-                    
-                    // Обновление или установка релиза с помощью Helm
-                    dir("${APP_PATH}") {
-                        sh "helm upgrade --install ${APP_HELM_NAME} . --set image.repository=${DOCKER_REGISTRY}/${APP_NAME} --set image.tag=latest"
+                    dir("${APP1_PATH}") {
+                        sh "helm upgrade --install ${APP1_HELM_NAME} . --set image.repository=${DOCKER_REGISTRY}/${APP1_NAME} --set image.tag=latest"
+                    }
+                }
+            }
+        }
+
+        stage('Build Maven Project for App1') {
+            when {
+                expression { return currentBuild.currentResult == 'SUCCESS' }
+            }
+            steps {
+                dir("${APP2_PATH}") {
+                    sh 'mvn clean install'
+                }
+            }
+        }
+
+        stage('Build Docker Image for App1') {
+            when {
+                expression { return currentBuild.currentResult == 'SUCCESS' }
+            }
+            steps {
+                dir("${APP2_PATH}") {
+                    sh 'docker build -t ${APP2_NAME}:latest .'
+                }
+            }
+        }
+
+        stage('Tag Docker Image for App1') {
+            when {
+                expression { return currentBuild.currentResult == 'SUCCESS' }
+            }
+            steps {
+                sh 'docker tag ${APP2_NAME}:latest ${DOCKER_REGISTRY}/${APP2_NAME}:latest'
+            }
+        }
+
+        stage('Push Docker Image for App1 to Registry') {
+            when {
+                expression { return currentBuild.currentResult == 'SUCCESS' }
+            }
+            steps {
+                sh 'docker push ${DOCKER_REGISTRY}/${APP2_NAME}:latest'
+            }
+        }
+
+        stage('Deploy App1 with Helm') {
+            when {
+                expression { return currentBuild.currentResult == 'SUCCESS' }
+            }
+            steps {
+                script {
+                    dir("${APP2_PATH}") {
+                        sh "helm upgrade --install ${APP2_HELM_NAME} . --set image.repository=${DOCKER_REGISTRY}/${APP2_NAME} --set image.tag=latest"
                     }
                 }
             }
