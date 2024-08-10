@@ -5,7 +5,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: {{ .Values.ingress.certIssuer }}
-    cert-manager.io/cluster-issuer: selfsigned-issuer
+#    cert-manager.io/cluster-issuer: selfsigned-issuer
     nginx.ingress.kubernetes.io/limit-connections: "{{ .Values.ingress.limitConnections }}"
     nginx.ingress.kubernetes.io/limit-rpm: "{{ .Values.ingress.limitRpm }}"
     nginx.ingress.kubernetes.io/client-body-buffer-size: 100M

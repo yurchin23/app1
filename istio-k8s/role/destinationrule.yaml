@@ -7,6 +7,19 @@ spec:
   trafficPolicy:
     loadBalancer:
       simple: ROUND_ROBIN
+    connectionPool:
+      tcp:
+        maxConnections: 10
+      http:
+        http1MaxPendingRequests: 10
+        maxRequestsPerConnection: 10
+    outlierDetection:
+      consecutiveErrors: 5
+      interval: 5s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+    tls:
+      mode: ISTIO_MUTUAL
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
@@ -17,3 +30,36 @@ spec:
   trafficPolicy:
     loadBalancer:
       simple: ROUND_ROBIN
+    connectionPool:
+      tcp:
+        maxConnections: 10
+      http:
+        http1MaxPendingRequests: 10
+        maxRequestsPerConnection: 10
+    outlierDetection:
+      consecutiveErrors: 5
+      interval: 5s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 50
+    tls:
+      mode: ISTIO_MUTUAL
+# apiVersion: cert-manager.io/v1
+# kind: Certificate
+# metadata:
+#   name: hello-kubernetes-tls
+#   namespace: default
+# spec:
+#   dnsNames:
+#     - myapp-service
+#     - myapp1-service
+#     - jenkins-svc
+#   issuerRef:
+#     group: cert-manager.io
+#     kind: ClusterIssuer
+#     name: letsencrypt-prod
+#   secretName: hello-kubernetes-tls
+#   usages:
+#     - digital signature
+#     - key encipherment
+#   privateKey:
+#     rotationPolicy: Always

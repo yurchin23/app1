@@ -1,0 +1,13 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-access-to-myapp
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: myapp1  # app1 - myapp1-service
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/default/sa/myapp-service-account"]
