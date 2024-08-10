@@ -1,4 +1,4 @@
-# service-account.yaml
+# jenkins-rbac.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -6,13 +6,12 @@ metadata:
   namespace: default
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
-  name: jenkins-role
-  namespace: default
+  name: jenkins-cluster-role
 rules:
 - apiGroups: [""]
-  resources: ["pods", "pods/exec", "services", "endpoints", "secrets"]
+  resources: ["pods", "pods/exec", "services", "endpoints", "secrets", "serviceaccounts"]
   verbs: ["get", "list", "watch", "create", "update", "delete", "patch"]
 - apiGroups: ["apps"]
   resources: ["deployments", "statefulsets", "replicasets"]
@@ -22,15 +21,14 @@ rules:
   verbs: ["get", "list", "watch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
-  name: jenkins-rolebinding
-  namespace: default
+  name: jenkins-cluster-role-binding
 subjects:
 - kind: ServiceAccount
   name: jenkins-sa
   namespace: default
 roleRef:
-  kind: Role
-  name: jenkins-role
+  kind: ClusterRole
+  name: jenkins-cluster-role
   apiGroup: rbac.authorization.k8s.io

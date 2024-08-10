@@ -9,7 +9,7 @@ pipeline {
         APP2_NAME = "app1"
         APP2_PATH = "spring-boot-app/app1"
         APP2_HELM_NAME = "app1"
-        VERSION = "${env.BUILD_ID}"
+        VERSION = "${env.TAG}"
     }
 
     stages {
@@ -44,6 +44,20 @@ pipeline {
         stage('Push Docker Image for App0 to Registry') {
             steps {
                 sh 'docker push ${DOCKER_REGISTRY}/${APP1_NAME}:${VERSION}'
+            }
+        }
+
+        stage('Update Helm Values and Push') {
+            steps {
+                script {
+                    dir("${APP1_PATH}") {
+                        // Обновляем values.yaml
+                        sh "sed -i 's/tag: .*/tag: ${VERSION}/' values.yaml"
+                        sh 'git add values.yaml'
+                        sh 'git commit -m "Update values.yaml for ${APP1_NAME} to version ${VERSION}"'
+                        sh 'git push origin master'
+                    }
+                }
             }
         }
 
@@ -97,26 +111,12 @@ pipeline {
             }
         }
 
-        stage('Deploy App1 with Helm') {
+        stage('Update Helm Values and Push') {
             when {
                 expression { return currentBuild.currentResult == 'SUCCESS' }
             }
             steps {
                 script {
                     dir("${APP2_PATH}") {
-                        sh "helm upgrade ${APP2_HELM_NAME} . --set image.repository=${DOCKER_REGISTRY}/${APP2_NAME} --set image.tag=${VERSION}"
-                    }
-                }
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'Deployment successful!'
-        }
-        failure {
-            echo 'Deployment failed!'
-        }
-    }
-}
+                        // Обновляем values.yaml
+                        sh "sed -i 's/tag: .*/tag: ${VERSION}/' values.yaml
