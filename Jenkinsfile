@@ -21,7 +21,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout([$class: 'GitSCM',
-                          branches: [[name: "${params.TAG}"]],
+                          branches: [[name: "refs/tags/${params.TAG}"]],
                           doGenerateSubmoduleConfigurations: false,
                           extensions: [],
                           gitTool: 'Default',
