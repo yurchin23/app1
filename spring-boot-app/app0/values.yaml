@@ -1,6 +1,6 @@
 image:
   repository: localhost:5000/myapp
-  tag: latest
+#  tag: latest
 
 app:
   name: myapp

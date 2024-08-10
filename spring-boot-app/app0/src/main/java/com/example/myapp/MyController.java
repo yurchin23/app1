@@ -15,7 +15,7 @@ public class MyController {
 
     @GetMapping("/")
     public String home() {
-        return "index.html"; // static folder - index.html
+        return "index";
     }
 
     @GetMapping("/send")

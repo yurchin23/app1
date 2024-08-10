@@ -9,6 +9,7 @@ pipeline {
         APP2_NAME = "app1"
         APP2_PATH = "spring-boot-app/app1"
         APP2_HELM_NAME = "app1"
+        VERSION = "${env.BUILD_ID}"
     }
 
     stages {
@@ -36,13 +37,13 @@ pipeline {
 
         stage('Tag Docker Image for App0') {
             steps {
-                sh 'docker tag ${APP1_NAME}:latest ${DOCKER_REGISTRY}/${APP1_NAME}:latest'
+                sh 'docker tag ${APP1_NAME}:latest ${DOCKER_REGISTRY}/${APP1_NAME}:${VERSION}'
             }
         }
 
         stage('Push Docker Image for App0 to Registry') {
             steps {
-                sh 'docker push ${DOCKER_REGISTRY}/${APP1_NAME}:latest'
+                sh 'docker push ${DOCKER_REGISTRY}/${APP1_NAME}:${VERSION}'
             }
         }
 
@@ -50,7 +51,7 @@ pipeline {
             steps {
                 script {
                     dir("${APP1_PATH}") {
-                        sh "helm upgrade ${APP1_HELM_NAME} . --set image.repository=${DOCKER_REGISTRY}/${APP1_NAME} --set image.tag=latest"
+                        sh "helm upgrade ${APP1_HELM_NAME} . --set image.repository=${DOCKER_REGISTRY}/${APP1_NAME} --set image.tag=${VERSION}"
                     }
                 }
             }
@@ -83,7 +84,7 @@ pipeline {
                 expression { return currentBuild.currentResult == 'SUCCESS' }
             }
             steps {
-                sh 'docker tag ${APP2_NAME}:latest ${DOCKER_REGISTRY}/${APP2_NAME}:latest'
+                sh 'docker tag ${APP2_NAME}:latest ${DOCKER_REGISTRY}/${APP2_NAME}:${VERSION}'
             }
         }
 
@@ -92,7 +93,7 @@ pipeline {
                 expression { return currentBuild.currentResult == 'SUCCESS' }
             }
             steps {
-                sh 'docker push ${DOCKER_REGISTRY}/${APP2_NAME}:latest'
+                sh 'docker push ${DOCKER_REGISTRY}/${APP2_NAME}:${VERSION}'
             }
         }
 
@@ -103,7 +104,7 @@ pipeline {
             steps {
                 script {
                     dir("${APP2_PATH}") {
-                        sh "helm upgrade ${APP2_HELM_NAME} . --set image.repository=${DOCKER_REGISTRY}/${APP2_NAME} --set image.tag=latest"
+                        sh "helm upgrade ${APP2_HELM_NAME} . --set image.repository=${DOCKER_REGISTRY}/${APP2_NAME} --set image.tag=${VERSION}"
                     }
                 }
             }
