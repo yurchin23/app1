@@ -9,7 +9,7 @@ pipeline {
         APP2_NAME = "app1"
         APP2_PATH = "spring-boot-app/app1"
         APP2_HELM_NAME = "app1"
-        VERSION = "${env.TAG}"
+        VERSION = "${TAG}"
     }
 
     stages {
